@@ -20,9 +20,6 @@
         </ul>
     </div>
 </nav>
-<script>
-const API_BASE = "https://dynamic-pricing-vbsw.onrender.com";
-</script>
 
 <div class="container">
 <div class="main-content">
@@ -32,8 +29,6 @@ const API_BASE = "https://dynamic-pricing-vbsw.onrender.com";
     <h1>Price Prediction & Optimization</h1>
     <p>AI-powered pricing for single products and datasets</p>
 </div>
-
-<!-- ================= SINGLE PRODUCT ================= -->
 
 <h3>🔍 Single Product Prediction</h3>
 
@@ -94,8 +89,6 @@ const API_BASE = "https://dynamic-pricing-vbsw.onrender.com";
     </div>
 </form>
 
-<!-- ================= GREEN RESULT ================= -->
-
 <div id="singleResult" class="results success-box" style="display:none;">
     <h3>📊 Price Optimization Results</h3>
 
@@ -121,8 +114,6 @@ const API_BASE = "https://dynamic-pricing-vbsw.onrender.com";
 </div>
 
 <hr style="margin:3rem 0;">
-
-<!-- ================= DATASET ANALYSIS ================= -->
 
 <h3>📂 Dataset Price Analysis</h3>
 <p>Upload a CSV file to analyze revenue growth across multiple products</p>
@@ -154,12 +145,16 @@ const API_BASE = "https://dynamic-pricing-vbsw.onrender.com";
 </div>
 </div>
 
-<!-- ================= SCRIPT ================= -->
+<!-- ================= API CONFIG (IMPORTANT) ================= -->
+<script>
+/* ✅ Render Backend API URL */
+const API_BASE = "https://dynamic-pricing-vbsw.onrender.com";
+</script>
 
+<!-- ================= SCRIPT ================= -->
 <script>
 let revenueChart, growthChart;
 
-/* LOAD SAMPLE */
 function loadSample() {
     product.value = "iPhone 15 Pro";
     category.value = "Electronics";
@@ -169,7 +164,6 @@ function loadSample() {
     day.value = "weekend";
 }
 
-/* SINGLE PRODUCT */
 predictionForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -182,7 +176,7 @@ predictionForm.addEventListener("submit", async (e) => {
         day: day.value
     };
 
-    const res = await fetch("http://127.0.0.1:8000/predict", {
+    const res = await fetch(`${API_BASE}/predict`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -202,7 +196,6 @@ predictionForm.addEventListener("submit", async (e) => {
     revIncrease.innerText = "₹" + d.revenue_increase.toFixed(2);
 });
 
-/* DATASET ANALYSIS */
 async function analyzeDataset() {
     const file = fileInput.files[0];
     if (!file) return alert("Upload CSV file");
@@ -215,7 +208,7 @@ async function analyzeDataset() {
     fd.append("file", file);
 
     try {
-        const res = await fetch("http://127.0.0.1:8000/predict-batch", {
+        const res = await fetch(`${API_BASE}/predict-batch`, {
             method: "POST",
             body: fd
         });
@@ -240,18 +233,18 @@ async function analyzeDataset() {
         const gr = d.rows.map(r => r.growth_percent);
 
         if (revenueChart) revenueChart.destroy();
-        revenueChart = new Chart(
-            document.getElementById("revenueChart").getContext("2d"), {
+        revenueChart = new Chart(revenueChart = new Chart(
+            document.getElementById("revenueChart"), {
             type: "bar",
             data: { labels, datasets: [
                 { label: "Current Revenue", data: cur },
                 { label: "Optimized Revenue", data: opt }
             ]}
-        });
+        }));
 
         if (growthChart) growthChart.destroy();
         growthChart = new Chart(
-            document.getElementById("growthChart").getContext("2d"), {
+            document.getElementById("growthChart"), {
             type: "line",
             data: { labels, datasets: [
                 { label: "Growth %", data: gr, tension: 0.4 }
