@@ -25,6 +25,7 @@ NumPy, Pandas, Scikit-learn, XGBoost
 HTML, CSS, JavaScript, Chart.js
 
 🗂️ Project Structure
+
 dynamic-pricing-project/
 ├── backend/
 ├── frontend/
