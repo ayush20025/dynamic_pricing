@@ -24,7 +24,6 @@
 <div class="container">
 <div class="main-content">
 
-<!-- HERO -->
 <div class="hero">
     <h1>Price Prediction & Optimization</h1>
     <p>AI-powered pricing for single products and datasets</p>
@@ -94,14 +93,14 @@
 
     <div class="form-grid">
         <div class="card">
-            <h4>📉 Current Metrics</h4>
+            <h4>Current Metrics</h4>
             <p>Current Price <span id="curPrice"></span></p>
             <p>Current Demand <span id="curDemand"></span></p>
             <p>Current Revenue <span id="curRevenue"></span></p>
         </div>
 
         <div class="card">
-            <h4>🎯 Recommended Metrics</h4>
+            <h4>Recommended Metrics</h4>
             <p>Recommended Price <span id="recPrice"></span></p>
             <p>Predicted Demand <span id="predDemand"></span></p>
             <p>Predicted Revenue <span id="predRevenue"></span></p>
@@ -121,11 +120,7 @@
 <input type="file" id="fileInput" accept=".csv">
 <button class="btn" onclick="analyzeDataset()">Analyze Dataset</button>
 
-<div id="loading" class="loading" style="display:none;">
-    <div class="spinner"></div>
-    Processing...
-</div>
-
+<div id="loading" class="loading" style="display:none;">Processing...</div>
 <div id="error" class="error" style="display:none;"></div>
 
 <div id="datasetResults" class="results success-box" style="display:none;">
@@ -145,16 +140,14 @@
 </div>
 </div>
 
-<!-- ================= API CONFIG (IMPORTANT) ================= -->
 <script>
-/* ✅ Render Backend API URL */
+/* ================= CONFIG ================= */
 const API_BASE = "https://dynamic-pricing-vbsw.onrender.com";
-</script>
 
-<!-- ================= SCRIPT ================= -->
-<script>
-let revenueChart, growthChart;
+let revenueChart = null;
+let growthChart = null;
 
+/* SAMPLE DATA */
 function loadSample() {
     product.value = "iPhone 15 Pro";
     category.value = "Electronics";
@@ -164,6 +157,7 @@ function loadSample() {
     day.value = "weekend";
 }
 
+/* SINGLE PRODUCT */
 predictionForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -186,16 +180,17 @@ predictionForm.addEventListener("submit", async (e) => {
     singleResult.style.display = "block";
 
     curPrice.innerText = "₹" + d.current_price.toFixed(2);
-    curDemand.innerText = d.current_demand.toFixed(0) + " units";
+    curDemand.innerText = d.current_demand.toFixed(0);
     curRevenue.innerText = "₹" + d.current_revenue.toFixed(2);
 
     recPrice.innerText = "₹" + d.recommended_price.toFixed(2);
-    predDemand.innerText = d.predicted_demand_at_recommended_price.toFixed(0) + " units";
+    predDemand.innerText = d.predicted_demand_at_recommended_price.toFixed(0);
     predRevenue.innerText = "₹" + d.predicted_revenue.toFixed(2);
 
     revIncrease.innerText = "₹" + d.revenue_increase.toFixed(2);
 });
 
+/* DATASET ANALYSIS */
 async function analyzeDataset() {
     const file = fileInput.files[0];
     if (!file) return alert("Upload CSV file");
@@ -213,42 +208,37 @@ async function analyzeDataset() {
             body: fd
         });
 
-        if (!res.ok) throw new Error(await res.text());
         const d = await res.json();
 
         loading.style.display = "none";
         datasetResults.style.display = "block";
 
-        avgCurrent.innerText =
-            "Average Current Revenue: ₹" + d.summary.avg_current_revenue.toFixed(2);
-        avgOptimized.innerText =
-            "Average Optimized Revenue: ₹" + d.summary.avg_optimized_revenue.toFixed(2);
-        growth.innerHTML =
-            "Estimated Growth: <strong style='color:#16a34a;'>"
-            + d.summary.growth_percent.toFixed(2) + "%</strong>";
-
-        const labels = d.rows.map(r => r.product);
-        const cur = d.rows.map(r => r.current_revenue);
-        const opt = d.rows.map(r => r.optimized_revenue);
-        const gr = d.rows.map(r => r.growth_percent);
+        avgCurrent.innerText = "Average Current Revenue: ₹" + d.summary.avg_current_revenue.toFixed(2);
+        avgOptimized.innerText = "Average Optimized Revenue: ₹" + d.summary.avg_optimized_revenue.toFixed(2);
+        growth.innerHTML = "Estimated Growth: <strong>" + d.summary.growth_percent.toFixed(2) + "%</strong>";
 
         if (revenueChart) revenueChart.destroy();
-        revenueChart = new Chart(revenueChart = new Chart(
-            document.getElementById("revenueChart"), {
-            type: "bar",
-            data: { labels, datasets: [
-                { label: "Current Revenue", data: cur },
-                { label: "Optimized Revenue", data: opt }
-            ]}
-        }));
-
         if (growthChart) growthChart.destroy();
-        growthChart = new Chart(
-            document.getElementById("growthChart"), {
+
+        revenueChart = new Chart(document.getElementById("revenueChart"), {
+            type: "bar",
+            data: {
+                labels: d.rows.map(r => r.product),
+                datasets: [
+                    { label: "Current Revenue", data: d.rows.map(r => r.current_revenue) },
+                    { label: "Optimized Revenue", data: d.rows.map(r => r.optimized_revenue) }
+                ]
+            }
+        });
+
+        growthChart = new Chart(document.getElementById("growthChart"), {
             type: "line",
-            data: { labels, datasets: [
-                { label: "Growth %", data: gr, tension: 0.4 }
-            ]}
+            data: {
+                labels: d.rows.map(r => r.product),
+                datasets: [
+                    { label: "Growth %", data: d.rows.map(r => r.growth_percent), tension: 0.4 }
+                ]
+            }
         });
 
     } catch (err) {
