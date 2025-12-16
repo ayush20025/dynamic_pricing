@@ -1,21 +1,22 @@
-Dynamic Pricing Model for E-commerce Products
-Overview
+🚀 Dynamic Pricing Model for E-commerce Products
+📌 Overview
 
-This project implements a Dynamic Pricing Model using Machine Learning to predict customer demand and recommend optimal product prices for maximizing revenue in e-commerce platforms. The system is developed as a web-based application with a FastAPI backend and an interactive frontend.
+This project presents a machine learning-based dynamic pricing system for e-commerce platforms.
+It predicts customer demand and recommends optimal product prices to maximize revenue by analyzing pricing, competition, and seasonal factors through a web-based application.
 
-Features
+✨ Key Features
 
-Machine learning–based demand prediction
+📈 Demand prediction using Machine Learning
 
-Dynamic price recommendation
+💰 Dynamic price recommendation for revenue optimization
 
-Revenue optimization
+📂 CSV dataset upload for batch analysis
 
-CSV dataset upload for batch analysis
+📊 Interactive charts for result visualization
 
-Web-based frontend with result visualization
+🌐 User-friendly web interface
 
-Technologies
+🛠️ Technologies Used
 
 Python, FastAPI
 
@@ -23,35 +24,31 @@ NumPy, Pandas, Scikit-learn, XGBoost
 
 HTML, CSS, JavaScript, Chart.js
 
-Project Structure
+🗂️ Project Structure
 dynamic-pricing-project/
 ├── backend/
 ├── frontend/
 ├── datasets/
 └── README.md
 
-Deployment
+🌍 Deployment
 
-Backend deployed using FastAPI on a cloud platform
+Backend: Deployed using FastAPI on a cloud platform
 
-Frontend deployed using GitHub Pages
+Frontend: Deployed using GitHub Pages
 
 Provides one-click access to the application
 
-Academic Details
+🎓 Academic Information
 
 Student: Ayush Kumar
-
 Roll No.: 24MAM011
-
 Enrollment No.: 24-05252
 
-Guide: Dr. Sufian Badar
-
+Supervisor: Dr. Sufian Badar
 Department: Computer Science
+University: Jamia Millia Islamia, New Delhi
 
-University: Jamia Millia Islamia
+📄 License
 
-License
-
-For academic use only.
+Developed for academic and educational purposes only.
