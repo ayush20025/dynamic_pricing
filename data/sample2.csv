@@ -1,0 +1,9 @@
+product,category,current_price,competitor_price,season,day
+Samsung Galaxy S23,Electronics,68999,65999,normal,weekday
+Nike Sports Shoes,Sports,5499,5299,holiday,weekend
+Lakme Face Cream,Beauty,799,749,normal,weekday
+Wooden Dining Table,Home & Garden,22999,23999,normal,weekend
+Data Science Handbook,Books,1199,1099,holiday,weekday
+Women Kurti,Clothing,1499,1399,normal,weekday
+Bluetooth Headphones,Electronics,2999,2799,holiday,weekend
+Yoga Mat,Sports,999,899,normal,weekday
